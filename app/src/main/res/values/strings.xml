@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">CalendarMultiselect</string>
+    <string name="ri">日</string>
+    <string name="yi">一</string>
+    <string name="er">二</string>
+    <string name="san">三</string>
+    <string name="si">四</string>
+    <string name="wu">五</string>
+    <string name="liu">六</string>
+</resources>
