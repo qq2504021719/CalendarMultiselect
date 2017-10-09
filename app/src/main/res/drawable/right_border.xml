@@ -6,7 +6,7 @@
         </shape>
     </item>
     <!-- 主体背景颜色值 -->
-    <item android:bottom="1dp">
+    <item android:right="1dp" >
         <shape>
             <solid android:color="@color/huisef5"/>
         </shape>

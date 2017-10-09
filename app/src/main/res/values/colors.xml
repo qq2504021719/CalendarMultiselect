@@ -4,4 +4,8 @@
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
     <color name="huise">#CCCCCC</color>
+    <color name="baise">#FFFFFF</color>
+    <color name="huisef5">#f5f5f5</color>
+    <color name="huise6">#666666</color>
+    <color name="zhuti">#0099FF</color>
 </resources>
