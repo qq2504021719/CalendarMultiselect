@@ -6,5 +6,5 @@
     <!-- 矩形的圆角弧度 -->
     <corners android:radius="5dp" />
     <!-- 矩形的填充色 -->
-    <solid android:color="@color/zhuti" />
+    <solid android:color="@color/zhutiCalendar" />
 </shape>

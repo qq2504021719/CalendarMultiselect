@@ -14,7 +14,7 @@ public class DayColor {
 
     public DayColor(){
         mColor = R.drawable.ri_qi_background;
-        mFontColor = R.color.baise;
+        mFontColor = R.color.baiseCalendar;
     }
 
     public void setFontColor(int fontSize) {

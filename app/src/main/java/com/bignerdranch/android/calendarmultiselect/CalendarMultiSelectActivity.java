@@ -425,7 +425,7 @@ public class CalendarMultiSelectActivity extends AppCompatActivity {
         textView.setText(string);
         textView.setGravity(Gravity.CENTER);
         textView.setPadding(5,5,5,5);
-        textView.setTextColor(getResources().getColor(R.color.huise6));
+        textView.setTextColor(getResources().getColor(R.color.huise6Calendar));
 
         if(leix == 1 && string != ""){
             textView.setTextColor(getResources().getColor(color));
@@ -443,7 +443,7 @@ public class CalendarMultiSelectActivity extends AppCompatActivity {
                     String day = mXuanYear+mXuanMonth+XinShiStr;
                     String[] strings = ValueIs(day);
                     if(strings[0].equals("true")){
-                        textView1.setTextColor(getResources().getColor(R.color.huise6));
+                        textView1.setTextColor(getResources().getColor(R.color.huise6Calendar));
                         textView1.setBackground(getResources().getDrawable(R.drawable.ri_qi_background1));
                         // 删除存储的数据
                         int i = Integer.valueOf(strings[1]);

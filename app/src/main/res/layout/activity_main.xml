@@ -23,7 +23,7 @@
             android:gravity="center_horizontal"
             android:text="2017"
             android:layout_weight="1"
-            android:textColor="@color/zhuti"
+            android:textColor="@color/zhutiCalendar"
             android:background="@drawable/right_border"/>
         <TextView
             android:id="@+id/textView_yue"
@@ -33,14 +33,14 @@
             android:gravity="center_horizontal"
             android:text="09"
             android:layout_weight="1"
-            android:textColor="@color/zhuti"
+            android:textColor="@color/zhutiCalendar"
             android:background="@drawable/right_border"/>
         <TextView
             android:id="@+id/textView_jing_ri"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:padding="5dp"
-            android:textColor="@color/zhuti"
+            android:textColor="@color/zhutiCalendar"
             android:gravity="center_horizontal"
             android:text="今日"
             android:layout_weight="1"/>

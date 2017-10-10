@@ -5,7 +5,7 @@ android:shape="oval"
 android:useLevel="false">
 
 <!-- 实心 -->
-<solid android:color="@color/huisef5" />
+<solid android:color="@color/huisef5Calendar" />
 <!-- 圆角 -->
 <corners android:radius="360dp" />
 </shape>

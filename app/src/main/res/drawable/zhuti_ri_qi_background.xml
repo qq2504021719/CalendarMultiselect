@@ -5,7 +5,7 @@ android:shape="oval"
 android:useLevel="false">
 
 <!-- 实心 -->
-<solid android:color="@color/zhuti" />
+<solid android:color="@color/zhutiCalendar" />
 <!-- 圆角 -->
 <corners android:radius="360dp" />
 </shape>

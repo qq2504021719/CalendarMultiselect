@@ -3,9 +3,9 @@
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your theme here. -->
-        <item name="colorPrimary">@color/baise</item>
-        <item name="colorPrimaryDark">@color/baise</item>
-        <item name="colorAccent">@color/colorAccent</item>
+        <item name="colorPrimary">@color/baiseCalendar</item>
+        <item name="colorPrimaryDark">@color/baiseCalendar</item>
+        <item name="colorAccent">@color/baiseCalendar</item>
     </style>
 
 
