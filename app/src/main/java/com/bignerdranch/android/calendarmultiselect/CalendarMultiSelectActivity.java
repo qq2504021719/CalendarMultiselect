@@ -28,6 +28,8 @@ import java.util.List;
 
 public class CalendarMultiSelectActivity extends AppCompatActivity {
 
+    private static final String EXTRA = "com.bignerdranch.android.calendarmultiselect.CalendarMultiSelectActivity";
+
     public Context mContext;
 
     public final String TAG = "日历";
@@ -78,6 +80,12 @@ public class CalendarMultiSelectActivity extends AppCompatActivity {
 
     // 返回按钮
     public Button mFan_hui;
+
+    public static Intent newIntent(Context packageContext, int intIsId){
+        Intent i = new Intent(packageContext,CalendarMultiSelectActivity.class);
+        i.putExtra(EXTRA,intIsId);
+        return i;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
