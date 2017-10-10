@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:gravity="center"
+              android:layout_height="match_parent">
+
+    <Button
+        android:id="@+id/xuan_ze"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="选择日期"/>
+
+    <TextView
+        android:id="@+id/xuan_ze_nei_rong"
+        android:layout_margin="5dp"
+        android:padding="5dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+    <Button
+        android:id="@+id/mo_ren_xuan_zhong"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="默认选中"/>
+
+</LinearLayout>
