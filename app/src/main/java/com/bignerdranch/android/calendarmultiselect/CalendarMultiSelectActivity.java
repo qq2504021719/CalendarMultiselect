@@ -452,8 +452,13 @@ public class CalendarMultiSelectActivity extends AppCompatActivity {
                     }else{
                         Log.i(TAG,day);
 
+<<<<<<< HEAD
                         textView1.setTextColor(getResources().getColor(Config.mMoRenZiTiSe));
                         textView1.setBackground(getResources().getDrawable(Config.mMoRenBeiJingSe));
+=======
+                        textView1.setTextColor(getResources().getColor(R.color.baise));
+                        textView1.setBackground(getResources().getDrawable(R.drawable.ri_qi_background));
+>>>>>>> d8263a399486502eccedef58af89b15855b0b41c
                         // 存储选择
                         DayColor dayColor = new DayColor();
                         dayColor.setDay(day);
