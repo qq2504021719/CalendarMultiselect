@@ -24,7 +24,7 @@
             android:text="2017"
             android:layout_weight="1"
             android:textColor="@color/zhutiCalendar"
-            android:background="@drawable/right_border"/>
+            android:background="@drawable/calendar_right_border"/>
         <TextView
             android:id="@+id/textView_yue"
             android:layout_width="0dp"
@@ -34,7 +34,7 @@
             android:text="09"
             android:layout_weight="1"
             android:textColor="@color/zhutiCalendar"
-            android:background="@drawable/right_border"/>
+            android:background="@drawable/calendar_right_border"/>
         <TextView
             android:id="@+id/textView_jing_ri"
             android:layout_width="0dp"
