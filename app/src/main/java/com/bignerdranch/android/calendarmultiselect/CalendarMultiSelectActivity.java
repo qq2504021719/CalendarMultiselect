@@ -8,17 +8,23 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.View;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import org.json.JSONArray;
 import org.w3c.dom.Text;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
 
 public class CalendarMultiSelectActivity extends AppCompatActivity {
 
@@ -62,10 +68,16 @@ public class CalendarMultiSelectActivity extends AppCompatActivity {
     private AlertDialog alertDialog1;
 
     // 1 编辑模式 0 显示模式
-    public int mMoShi = 1;
+    public int mMoShi = Config.mMoShi;
 
     // 已选择数据
-    HashMap<String,HashMap<String,HashMap<String,String>>> myiXuanZheData = new HashMap<>();
+    List<DayColor> myiXuanZheData = Config.mYiXuanZheData;
+
+    // 选择日期返回标识
+    public static final String mFanHuiBiao = "data";
+
+    // 返回按钮
+    public Button mFan_hui;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,6 +98,39 @@ public class CalendarMultiSelectActivity extends AppCompatActivity {
     }
 
     /**
+     * 返回监听事件
+     * @param event
+     * @return
+     */
+    @Override
+    public boolean dispatchKeyEvent(KeyEvent event) {
+        if (event.getKeyCode() == KeyEvent.KEYCODE_BACK) {//点击的是返回键
+            if (event.getAction() == KeyEvent.ACTION_DOWN && event.getRepeatCount() == 0) {//按键的按下事件
+                fanhui();
+            } else if (event.getAction() == KeyEvent.ACTION_UP && event.getRepeatCount() == 0) {//按键的抬起事件
+
+            }
+        }
+        return super.dispatchKeyEvent(event);
+    }
+
+    /**
+     * 返回数据准备
+     */
+    public void fanhui(){
+        Intent intent = new Intent();
+
+        JSONArray json = new JSONArray();
+
+        for(DayColor dayColor : myiXuanZheData){
+            json.put(dayColor.getDay());
+        }
+
+        intent.putExtra(mFanHuiBiao,json.toString());
+        setResult(MainActivity.REQUEST_PHOTO,intent);
+    }
+
+    /**
      * 组件组件初始化
      */
     public void ViewInit(){
@@ -96,6 +141,8 @@ public class CalendarMultiSelectActivity extends AppCompatActivity {
         mTextView_yue = (TextView)findViewById(R.id.textView_yue);
         // 当前日
         mTextView_jing_ri = (TextView)findViewById(R.id.textView_jing_ri);
+        // 返回按钮
+        mFan_hui = (Button)findViewById(R.id.fan_hui);
     }
 
     /**
@@ -125,9 +172,6 @@ public class CalendarMultiSelectActivity extends AppCompatActivity {
         mTextView_yue.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-
-
                 AlertDialog.Builder alertBuilder = new AlertDialog.Builder(mContext);
                 alertBuilder.setItems(stringsyue, new DialogInterface.OnClickListener() {
                     @Override
@@ -149,6 +193,15 @@ public class CalendarMultiSelectActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 value();
+            }
+        });
+
+        // 返回按钮触发事件
+        mFan_hui.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                fanhui();
+                finish();
             }
         });
 
@@ -181,6 +234,11 @@ public class CalendarMultiSelectActivity extends AppCompatActivity {
      * 值操作
      */
     public void value(){
+        // 按钮样式
+        mFan_hui.setTextSize(Config.mButtonFontSize);
+        mFan_hui.setText(Config.mButtonText);
+        mFan_hui.setTextColor(getResources().getColor(Config.mButtonTextColor));
+        mFan_hui.setBackground(getResources().getDrawable(Config.mButtonBackground));
         // 当前年赋值
         stringsNian[0] = getYearMonth(1);
         // 下一年赋值
@@ -249,8 +307,10 @@ public class CalendarMultiSelectActivity extends AppCompatActivity {
                 LinearLayout neiBuZuJian = CreateLinearLayout(2);
                 TextView textView = CreateTextView(strings[i],0,0,0);
                 // 查看是否创建背景色
-                if(ValueIs(strings[i])){
-                    textView = CreateTextView(strings[i],1,R.color.baise,R.drawable.ri_qi_background);
+                String[] stringsc = ValueIs(mXuanYear+mXuanMonth+strings[i]);
+                if(stringsc[0].equals("true")){
+                    DayColor dayColor = myiXuanZheData.get(Integer.valueOf(stringsc[1]));
+                    textView = CreateTextView(strings[i],1,dayColor.getFontColor(),dayColor.getColor());
                 }
 
                 neiBuZuJian.addView(textView);
@@ -268,15 +328,17 @@ public class CalendarMultiSelectActivity extends AppCompatActivity {
         }
     }
 
-    public boolean ValueIs(String string){
-        if(myiXuanZheData.get(mXuanYear) != null){
-            if(myiXuanZheData.get(mXuanYear).get(mXuanMonth) != null){
-                if(myiXuanZheData.get(mXuanYear).get(mXuanMonth).get(string) != null){
-                    return true;
-                }
+    public String[] ValueIs(String string){
+        String[] strings = new String[2];
+        strings[0] = "false";
+        strings[1] = "0";
+        for (int i = 0;i<myiXuanZheData.size();i++){
+            if(myiXuanZheData.get(i).getDay().equals(string)){
+                strings[0] = "true";
+                strings[1] = ""+i;
             }
         }
-        return false;
+        return strings;
     }
 
     /**
@@ -378,39 +440,24 @@ public class CalendarMultiSelectActivity extends AppCompatActivity {
                 int isDianJi = 0;
                 @Override
                 public void onClick(View view) {
-                    if(ValueIs(XinShiStr)){
+                    String day = mXuanYear+mXuanMonth+XinShiStr;
+                    String[] strings = ValueIs(day);
+                    if(strings[0].equals("true")){
                         textView1.setTextColor(getResources().getColor(R.color.huise6));
                         textView1.setBackground(getResources().getDrawable(R.drawable.ri_qi_background1));
                         // 删除存储的数据
-                        myiXuanZheData.get(mXuanYear).get(mXuanMonth).remove(XinShiStr);
+                        int i = Integer.valueOf(strings[1]);
+                        myiXuanZheData.remove(i);
+
                     }else{
-                        Log.i(TAG,XinShiStr);
+                        Log.i(TAG,day);
+
                         textView1.setTextColor(getResources().getColor(R.color.baise));
                         textView1.setBackground(getResources().getDrawable(R.drawable.ri_qi_background));
                         // 存储选择
-
-
-
-
-                        // 对应年月入存在
-
-                        if(myiXuanZheData.get(mXuanYear) != null && myiXuanZheData.get(mXuanYear).get(mXuanMonth) != null){
-                            myiXuanZheData.get(mXuanYear).get(mXuanMonth).put(XinShiStr,XinShiStr);
-                        }else{
-                            HashMap<String,String> hashMap = new HashMap<>();
-                            hashMap.put(XinShiStr,XinShiStr);
-                            HashMap<String,HashMap<String,String>> hashMap1 = new HashMap<>();
-                            hashMap1.put(mXuanMonth,hashMap);
-                            // 存储到二维数组
-                            if(myiXuanZheData.get(mXuanYear) != null){
-                                myiXuanZheData.get(mXuanYear).put(mXuanMonth,hashMap);
-                            }else{
-                                myiXuanZheData.put(mXuanYear,hashMap1);
-                            }
-
-                        }
-
-
+                        DayColor dayColor = new DayColor();
+                        dayColor.setDay(day);
+                        myiXuanZheData.add(dayColor);
                     }
                 }
             });

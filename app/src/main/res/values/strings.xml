@@ -7,4 +7,6 @@
     <string name="si">四</string>
     <string name="wu">五</string>
     <string name="liu">六</string>
+
+    <string name="fanHui">返回</string>
 </resources>
