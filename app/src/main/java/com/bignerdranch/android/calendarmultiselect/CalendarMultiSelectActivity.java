@@ -242,6 +242,10 @@ public class CalendarMultiSelectActivity extends AppCompatActivity {
      * 值操作
      */
     public void value(){
+        // 单选模式
+        if(Config.mDanXuanMoShi == 1){
+            Toast.makeText(mContext,"单选模式,只会取第一次选择", Toast.LENGTH_SHORT).show();
+        }
         // 按钮样式
         mFan_hui.setTextSize(Config.mButtonFontSize);
         mFan_hui.setText(Config.mButtonText);
@@ -466,6 +470,8 @@ public class CalendarMultiSelectActivity extends AppCompatActivity {
                         // 存储选择
                         DayColor dayColor = new DayColor();
                         dayColor.setDay(day);
+                        dayColor.setColor(Config.mMoRenBeiJingSe);
+                        dayColor.setFontColor(Config.mMoRenZiTiSe);
                         myiXuanZheData.add(dayColor);
                     }
                 }

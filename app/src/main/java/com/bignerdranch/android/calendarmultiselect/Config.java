@@ -24,6 +24,8 @@ public class Config {
     public static int mButtonText = R.string.fanHui;
     // 按钮字体大小
     public static int mButtonFontSize = 16;
+    // 选择模式 0 多选模式 1单选模式
+    public static int mDanXuanMoShi = 0;
 
 
 }
