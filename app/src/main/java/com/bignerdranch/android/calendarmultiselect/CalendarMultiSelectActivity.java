@@ -319,7 +319,7 @@ public class CalendarMultiSelectActivity extends AppCompatActivity {
                 LinearLayout neiBuZuJian = CreateLinearLayout(2);
                 TextView textView = CreateTextView(strings[i],0,0,0);
                 // 查看是否创建背景色
-                String[] stringsc = ValueIs(mXuanYear+mXuanMonth+strings[i]);
+                String[] stringsc = ValueIs(mXuanYear+"-"+mXuanMonth+"-"+strings[i]);
                 if(stringsc[0].equals("true")){
                     DayColor dayColor = myiXuanZheData.get(Integer.valueOf(stringsc[1]));
                     textView = CreateTextView(strings[i],1,dayColor.getFontColor(),dayColor.getColor());
@@ -452,7 +452,7 @@ public class CalendarMultiSelectActivity extends AppCompatActivity {
                 int isDianJi = 0;
                 @Override
                 public void onClick(View view) {
-                    String day = mXuanYear+mXuanMonth+XinShiStr;
+                    String day = mXuanYear+"-"+mXuanMonth+"-"+XinShiStr;
                     String[] strings = ValueIs(day);
                     if(strings[0].equals("true")){
                         textView1.setTextColor(getResources().getColor(R.color.huise6Calendar));
