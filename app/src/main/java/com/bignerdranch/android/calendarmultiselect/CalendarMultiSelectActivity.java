@@ -13,17 +13,22 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import org.json.JSONArray;
+import org.w3c.dom.Text;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 
 public class CalendarMultiSelectActivity extends AppCompatActivity {
+
+    private static final String EXTRA = "com.bignerdranch.android.calendarmultiselect.CalendarMultiSelectActivity";
 
     public Context mContext;
 
@@ -65,16 +70,22 @@ public class CalendarMultiSelectActivity extends AppCompatActivity {
     private AlertDialog alertDialog1;
 
     // 1 编辑模式 0 显示模式
-    public int mMoShi = CalendarConfig.mMoShi;
+    public int mMoShi = Config.mMoShi;
 
     // 已选择数据
-    List<DayColor> myiXuanZheData = CalendarConfig.mYiXuanZheData;
+    List<DayColor> myiXuanZheData = Config.mYiXuanZheData;
 
     // 选择日期返回标识
     public static final String mFanHuiBiao = "data";
 
     // 返回按钮
     public Button mFan_hui;
+
+    public static Intent newIntent(Context packageContext, int intIsId){
+        Intent i = new Intent(packageContext,CalendarMultiSelectActivity.class);
+        i.putExtra(EXTRA,intIsId);
+        return i;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -232,14 +243,14 @@ public class CalendarMultiSelectActivity extends AppCompatActivity {
      */
     public void value(){
         // 单选模式
-        if(CalendarConfig.mDanXuanMoShi == 1){
+        if(Config.mDanXuanMoShi == 1){
             Toast.makeText(mContext,"单选模式,只会取第一次选择", Toast.LENGTH_SHORT).show();
         }
         // 按钮样式
-        mFan_hui.setTextSize(CalendarConfig.mButtonFontSize);
-        mFan_hui.setText(CalendarConfig.mButtonText);
-        mFan_hui.setTextColor(getResources().getColor(CalendarConfig.mButtonTextColor));
-        mFan_hui.setBackground(getResources().getDrawable(CalendarConfig.mButtonBackground));
+        mFan_hui.setTextSize(Config.mButtonFontSize);
+        mFan_hui.setText(Config.mButtonText);
+        mFan_hui.setTextColor(getResources().getColor(Config.mButtonTextColor));
+        mFan_hui.setBackground(getResources().getDrawable(Config.mButtonBackground));
         // 当前年赋值
         stringsNian[0] = getYearMonth(1);
         // 下一年赋值
@@ -306,13 +317,11 @@ public class CalendarMultiSelectActivity extends AppCompatActivity {
         for(int i = 0;i<strings.length;i++){
             if(strings[i] != null){
                 LinearLayout neiBuZuJian = CreateLinearLayout(2);
-//                TextView textView = CreateTextView(strings[i],0,0,0);
-                TextView textView = isCreateTextDanXuan(strings[i]);
+                TextView textView = CreateTextView(strings[i],0,0,0);
                 // 查看是否创建背景色
                 String[] stringsc = ValueIs(mXuanYear+"-"+mXuanMonth+"-"+strings[i]);
                 if(stringsc[0].equals("true")){
                     DayColor dayColor = myiXuanZheData.get(Integer.valueOf(stringsc[1]));
-                    Log.i("巡店",strings[i]);
                     textView = CreateTextView(strings[i],1,dayColor.getFontColor(),dayColor.getColor());
                 }
 
@@ -329,81 +338,6 @@ public class CalendarMultiSelectActivity extends AppCompatActivity {
                 }
             }
         }
-    }
-
-    /**
-     * 查看天是创建正常还是提示,创建每天textview
-     * @param day 那一天
-     * @return
-     */
-    public TextView isCreateTextDanXuan(String day){
-        String RiQi = mXuanYear+"-"+mXuanMonth+"-"+day;
-        Boolean isC = false;
-        for(int i = 0;i<CalendarConfig.mZhouJiBuKeXuan.length;i++){
-            isC = false;
-            if(CalendarConfig.mZhouJiBuKeXuan[i].equals(getCurrentWeekOfMonth(RiQi))){
-                isC = true;
-                break;
-            }
-        }
-        TextView textView = new TextView(mContext);
-        // 周几是否可选
-        if(isC){
-            if(day.length() > 0) {
-                textView = CreateTextViewString(day, CalendarConfig.mZhouJiBuKeXuanTiShi, R.color.baiseCalendar, R.drawable.ri_qi_background_huise);
-            }
-        }else{
-            if(day.length() > 0) {
-                textView = CreateTextView(day,0,0,0);
-            }
-
-        }
-
-        // 小于当前日期的是否可选
-        // 今日日期
-        int JinRiYear = Integer.valueOf(new SimpleDateFormat("yyyy").format(new Date()));
-        int JinRiMonth = Integer.valueOf(new SimpleDateFormat("MM").format(new Date()));
-        int JinRiDay = Integer.valueOf(new SimpleDateFormat("d").format(new Date()));
-
-        if(CalendarConfig.mYiGuoBuKeXuan == 1){
-            if(Integer.valueOf(mXuanYear) <= JinRiYear && day.length() > 0){
-                if(Integer.valueOf(mXuanMonth) <= JinRiMonth){
-                    if(Integer.valueOf(day) < JinRiDay){
-                        textView = CreateTextViewString(day,CalendarConfig.mYiGuoBuKeXuanTiShi,R.color.baiseCalendar,R.drawable.ri_qi_background_huise);
-                    }
-                }
-
-            }
-        }
-
-
-
-
-        return textView;
-        // 查看当前日期周几
-    }
-
-    /**
-     * @author jerry.chen 2017-10-12
-     * @param dateStr
-     * @return 获取当前是星期几
-     */
-    public String getCurrentWeekOfMonth(String dateStr) {
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-        Calendar c = Calendar.getInstance();
-        try {
-            String[] day_of_week = {"周日","周一","周二","周三","周四","周五","周六"};
-            c.setTime(format.parse(dateStr));
-            int dayForWeek = 0;
-
-            dayForWeek = c.get(Calendar.DAY_OF_WEEK) - 1;
-            return day_of_week[dayForWeek];
-
-        } catch (ParseException e) {
-
-            e.printStackTrace();
-        }
-        return "";
     }
 
     public String[] ValueIs(String string){
@@ -473,20 +407,17 @@ public class CalendarMultiSelectActivity extends AppCompatActivity {
 
     /**
      * 返回年 月
-     * @param is 1 返回年 2返回月 3返回日
+     * @param is 1 返回年 2返回月
      * @return
      */
     public String getYearMonth(int is){
         Calendar cal = Calendar.getInstance();
         cal.set(Calendar.DAY_OF_MONTH,cal.getMinimum(Calendar.DATE));
         if(is == 1){
-            return new SimpleDateFormat("yyyy").format(cal.getTime());
+            return new SimpleDateFormat( "yyyy").format(cal.getTime());
         }else if(is == 2){
-            return new SimpleDateFormat("MM").format(cal.getTime());
-        }else if(is == 3){
-            return new SimpleDateFormat("d").format(new Date());
+            return new SimpleDateFormat( "MM").format(cal.getTime());
         }
-
         return null;
     }
 
@@ -513,8 +444,7 @@ public class CalendarMultiSelectActivity extends AppCompatActivity {
             textView.setBackground(getResources().getDrawable(backgr));
         }
 
-        if(mMoShi == 1 && string != ""){
-
+        if(mMoShi == 1){
             final String XinShiStr = string;
             final TextView textView1 = textView;
             textView.setOnClickListener(new View.OnClickListener() {
@@ -532,19 +462,20 @@ public class CalendarMultiSelectActivity extends AppCompatActivity {
                         myiXuanZheData.remove(i);
 
                     }else{
-                        textView1.setTextColor(getResources().getColor(CalendarConfig.mMoRenZiTiSe));
-                        textView1.setBackground(getResources().getDrawable(CalendarConfig.mMoRenBeiJingSe));
+                        Log.i(TAG,day);
+
+                        textView1.setTextColor(getResources().getColor(Config.mMoRenZiTiSe));
+                        textView1.setBackground(getResources().getDrawable(Config.mMoRenBeiJingSe));
 
                         // 存储选择
                         DayColor dayColor = new DayColor();
                         dayColor.setDay(day);
-                        dayColor.setColor(CalendarConfig.mMoRenBeiJingSe);
-                        dayColor.setFontColor(CalendarConfig.mMoRenZiTiSe);
+                        dayColor.setColor(Config.mMoRenBeiJingSe);
+                        dayColor.setFontColor(Config.mMoRenZiTiSe);
                         myiXuanZheData.add(dayColor);
                     }
                 }
             });
-
         }
 
 
@@ -552,40 +483,8 @@ public class CalendarMultiSelectActivity extends AppCompatActivity {
     }
 
     /**
-     * 创建textview
-     * @param string 显示内容
-     * @param TiShi 提示文字
-     * @param color 标题颜色
-     * @param backgr 背景资源
-     * @return
-     */
-    public TextView CreateTextViewString(String string,final String TiShi, int color,int backgr){
-        TextView textView = new TextView(mContext);
-        LinearLayout.LayoutParams layoutParam = new LinearLayout.LayoutParams(68,68);
-
-        textView.setLayoutParams(layoutParam);
-        textView.setText(string);
-        textView.setGravity(Gravity.CENTER);
-        textView.setPadding(5,5,5,5);
-        textView.setTextColor(getResources().getColor(R.color.huise6Calendar));
-
-        textView.setTextColor(getResources().getColor(color));
-        textView.setBackground(getResources().getDrawable(backgr));
-
-        textView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Toast.makeText(mContext,TiShi, Toast.LENGTH_SHORT).show();
-            }
-        });
-
-
-        return textView;
-    }
-
-    /**
      * 创建布局
-     * @param leix 1外部行布局  2内部布局 UIBackgroundModes
+     * @param leix 1外部行布局  2内部布局
      * @return
      */
     public LinearLayout CreateLinearLayout(int leix){
@@ -603,7 +502,7 @@ public class CalendarMultiSelectActivity extends AppCompatActivity {
         if(leix == 1){
             linearLayout.setOrientation(LinearLayout.HORIZONTAL);
             linearLayout.setPadding(0,30,0,30);
-            linearLayout.setBackground(getResources().getDrawable(R.drawable.calendar_bottom_border));
+            linearLayout.setBackground(getResources().getDrawable(R.drawable.bottom_border));
         }else if(leix == 2){
             linearLayout.setGravity(Gravity.CENTER);
         }
